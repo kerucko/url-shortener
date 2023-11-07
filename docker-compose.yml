@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  shortener:
+    container_name: shortener
+    build: ./
+    command: ./shortener
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - CONFIG_PATH=./config.yaml
+  db:
+    container_name: psql
+    restart: always
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5436:5432"
