@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/go-chi/chi/v5"
+)
 
 func main() {
-	fmt.Println("meow")
+	_ = chi.NewRouter()
 }
