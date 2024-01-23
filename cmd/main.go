@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"go_url_shortener/internal/config"
+	"go_url_shortener/internal/handlers"
+	"go_url_shortener/pkg/redis"
 	"log"
 	"net/http"
 
@@ -12,8 +15,16 @@ import (
 func main() {
 	cfg := config.MustLoad()
 
+	dbPath := fmt.Sprintf("%s:%s", cfg.Redis.Host, cfg.Redis.Port)
+	db, err := redis.New(dbPath, cfg.Timeout)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
+
+	router.Post("/newurl", handlers.PostNewUrlHandler(db, cfg.Timeout))
 
 	log.Fatal(http.ListenAndServe(":"+cfg.Server.Port, router))
 }
