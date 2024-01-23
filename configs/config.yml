@@ -1,0 +1,7 @@
+server:
+  port: 3000
+
+redis:
+  host: "db"
+  port: 6379
+  timeout: 5s

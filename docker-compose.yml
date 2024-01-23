@@ -9,12 +9,15 @@ services:
     depends_on:
       - db
     environment:
-      - CONFIG_PATH=./config.yaml
+      - CONFIG_PATH=./configs/config.yml
   db:
-    container_name: psql
+    image: redis:7.2.4-alpine
     restart: always
-    image: "postgres:latest"
-    environment:
-      - POSTGRES_PASSWORD=postgres
     ports:
-      - "5436:5432"
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - db:/data
+volumes:
+  db:
+    driver: local
