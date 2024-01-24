@@ -2,12 +2,18 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
-func New(dbPath string, timeout time.Duration) (*redis.Client, error) {
+type Storage struct {
+	db *redis.Client
+}
+
+func New(dbPath string, timeout time.Duration) (*Storage, error) {
+	op := "redis.New"
 	client := redis.NewClient(&redis.Options{
 		Addr:     dbPath,
 		Password: "", // no password set
@@ -17,9 +23,9 @@ func New(dbPath string, timeout time.Duration) (*redis.Client, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	if err := client.Ping(ctx); err != nil {
-		return nil, err.Err()
+	if _, err := client.Ping(ctx).Result(); err != nil {
+		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
-	return client, nil
+	return &Storage{client}, nil
 }

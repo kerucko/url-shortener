@@ -16,6 +16,7 @@ func main() {
 	cfg := config.MustLoad()
 
 	dbPath := fmt.Sprintf("%s:%s", cfg.Redis.Host, cfg.Redis.Port)
+	log.Println(dbPath)
 	db, err := redis.New(dbPath, cfg.Timeout)
 	if err != nil {
 		log.Fatal(err)

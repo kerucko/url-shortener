@@ -1,13 +1,16 @@
 package handlers
 
 import (
+	"go_url_shortener/pkg/redis"
+	"log"
 	"net/http"
 	"time"
-
-	"github.com/redis/go-redis/v9"
 )
 
-func PostNewUrlHandler(db *redis.Client, timeout time.Duration) http.HandlerFunc {
+func PostNewUrlHandler(db *redis.Storage, timeout time.Duration) http.HandlerFunc {
 	op := "PostNewUrlHandler"
-	return func(w http.ResponseWriter, r *http.Request) {}
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println(op)
+		w.Write([]byte("hello"))
+	}
 }
