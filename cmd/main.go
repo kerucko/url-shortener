@@ -24,6 +24,9 @@ func main() {
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
 
 	router.Post("/newurl", handlers.PostNewUrlHandler(db, cfg.Timeout))
 
